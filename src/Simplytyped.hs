@@ -38,6 +38,7 @@ conversor (LAbs x typ t) ent = Lam typ (conversor t (x:ent))
 ----------------------------
 
 -- substituye una variable por un término en otro término
+{- Cant. de abstracciones -> termino a sustituir -> termino donde se efectua la sustitución -}
 sub :: Int -> Term -> Term -> Term
 sub i t (Bound j) | i == j    = t
 sub _ _ (Bound j) | otherwise = Bound j
@@ -50,11 +51,19 @@ quote :: Value -> Term
 quote (VLam t f) = Lam t f
 
 -- evalúa un término en un entorno dado
-eval :: NameEnv Value Type -> Term -> Value
-eval = undefined
-
-
-
+eval :: NameEnv Value Type -> Term -> Value {- Type Term -}
+eval nvs (Free x) = 
+  case lookup x nvs of
+    Just (v, _)   -> v
+    Nothing       -> error "Variable libre nok definida" {- CONSULTAR QUE HACER -} 
+eval _ (Lam typ t) = VLam typ t
+{- Evaluo el t1 -> evaluo t2 -> aplico el arg a la func. -}
+eval nvs (t1 :@: t2) =
+  case eval nvs t1 of
+    VLam typ body ->
+      let   v2 = eval nvs t2
+            t' = sub 0 (quote v2) body
+      in eval nvs t'
 
 ----------------------
 --- type checker
