@@ -1,0 +1,24 @@
+/home/ivocw/.stack/programs/x86_64-linux/ghc-tinfo6-8.8.3/lib/ghc-8.8.3/include/ghcversion.h:
+  hash: 40d1b759f485f1cd5a54141a6412691ac2b76930507289a16a6a7b89b045b4d2
+/home/ivocw/Downloads/TP2/.stack-work/dist/x86_64-linux-tinfo6/ghc-8.8.3/build/autogen/Paths_TP2.hs:
+  hash: d1328de2414d6bb86932626d4afcb4ff91eaa8da3e9a85e9df001ff9d15d7b94
+/home/ivocw/Downloads/TP2/.stack-work/dist/x86_64-linux-tinfo6/ghc-8.8.3/build/autogen/cabal_macros.h:
+  hash: c2f9c18e5eab0e14e42cb6958d2f22a0da46007cefba024dce4c13ad84807e03
+/home/ivocw/Downloads/TP2/ChangeLog.md:
+  hash: b6db31e04d81c0e662bab2cbee2044b15c6a17422f0ed7b23ee85da5086cf956
+/home/ivocw/Downloads/TP2/README.md:
+  hash: c9dd571c704339f5233b28ef34c9c97ab78ebad729d2ce85fb406910ae0ffb6c
+/home/ivocw/Downloads/TP2/TP2.cabal:
+  hash: cb0f821cf9fb3f41218030e9847773d4370e9fd5313931ae8cc59a1862c4dcf4
+/home/ivocw/Downloads/TP2/package.yaml:
+  hash: 3f5d9d8a2a57469ed5359f4daf48ab7a74a6eb0299ce2def67ad968547b7ac61
+/home/ivocw/Downloads/TP2/src/Common.hs:
+  hash: 2a763d1edc5460f0adc355fa26341763fde497846250cb0a5841c15c5d1b340d
+/home/ivocw/Downloads/TP2/src/Parse.y:
+  hash: fdc84850c1157735ac40989d1fda0cde1c20240de866c5120d955c2dae4857b8
+/home/ivocw/Downloads/TP2/src/PrettyPrinter.hs:
+  hash: 9491d18994f6082af5a86ab058c5e53608c73fe53f26de26d096f276c4f8e039
+/home/ivocw/Downloads/TP2/src/Simplytyped.hs:
+  hash: 6ac752e8d350ceffb9ce835fdfc570d6d2bc2a7d530bb6b4ea78872dea713f43
+/usr/include/stdc-predef.h:
+  hash: 383ff8bd7dcc87deefedd062637f4afe28f85f8be443beda8b41d15e45ef1679
