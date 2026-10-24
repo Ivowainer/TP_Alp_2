@@ -32,6 +32,12 @@ conversor (LVar x) ent =
     Just i -> (Bound i)
 conversor (LApp t1 t2) ent = (conversor t1 ent) :@: (conversor t2 ent)
 conversor (LAbs x typ t) ent = Lam typ (conversor t (x:ent))
+conversor (LLet var t1 t2) ent = 
+  let
+    t1' = conversor t1 ent
+  in Let t1' (conversor t2 (var:ent))
+
+{- !!!!!!!!!!!!!!!!!!!!!!!!!!!! CONSULTAR: \x:E . let x = t1 in x; en esta expresión se liga la variable  !!!!!!!!!!!!!!!!!!!!!!!!!!!! -}
 
 ----------------------------
 --- evaluador de términos
@@ -45,6 +51,7 @@ sub _ _ (Bound j) | otherwise = Bound j
 sub _ _ (Free n   )           = Free n
 sub i t (u   :@: v)           = sub i t u :@: sub i t v
 sub i t (Lam t'  u)           = Lam t' (sub (i + 1) t u)
+sub i t (Let t1 t2)           = Let (sub i t t1) (sub (i + 1) t t2)
 
 -- convierte un valor en el término equivalente
 quote :: Value -> Term
@@ -60,13 +67,18 @@ eval _ (Lam typ t) = VLam typ t
 {- Evaluo el t1 -> evaluo t2 -> aplico el arg a la func. -}
 eval nvs (t1 :@: t2) =
   case eval nvs t1 of
-    VLam typ body ->
+    VLam typ body -> {- \x:T.body -}
       let   v2 = eval nvs t2
-            t' = sub 0 (quote v2) body
+            t' = sub 0 (quote v2) body {- realiza la sustitución sobre body con v2 (quote para pasar a term)  -}
       in eval nvs t'
+eval nvs (Let t1 t2) =
+  let
+    v1 = eval nvs t1
+    t' = sub 0 (quote v1) t2
+  in eval nvs t'
 
 ----------------------
---- type checker
+--- type checkers
 -----------------------
 
 -- infiere el tipo de un término
@@ -111,5 +123,6 @@ infer' c e (t :@: u) = infer' c e t >>= \tt -> infer' c e u >>= \tu ->
     FunT t1 t2 -> if (tu == t1) then ret t2 else matchError t1 tu
     _          -> notfunError tt
 infer' c e (Lam t u) = infer' (t : c) e u >>= \tu -> ret $ FunT t tu
+infer' c e (Let t1 t2) = infer' c e t1 >>= \tt1 -> infer' (tt1 : c) e t2 >>= \tt2 -> ret tt2
 
 

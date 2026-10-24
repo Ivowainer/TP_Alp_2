@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/bin"
-libdir     = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/lib/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0-HulsqrtklG321LN7cs02Q6"
-dynlibdir  = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/lib/x86_64-linux-ghc-8.8.3"
-datadir    = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/share/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0"
-libexecdir = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/libexec/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0"
-sysconfdir = "/home/ivocw/Downloads/TP2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/etc"
+bindir     = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/bin"
+libdir     = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/lib/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0-HulsqrtklG321LN7cs02Q6"
+dynlibdir  = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/lib/x86_64-linux-ghc-8.8.3"
+datadir    = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/share/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0"
+libexecdir = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/libexec/x86_64-linux-ghc-8.8.3/TP2-0.1.0.0"
+sysconfdir = "/home/ivocw/Desktop/TP_Alp_2/.stack-work/install/x86_64-linux-tinfo6/99d3d52e57ec6e9c39feeb2948598d900ece340c07d7bc326375770071591176/8.8.3/etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "TP2_bindir") (\_ -> return bindir)
