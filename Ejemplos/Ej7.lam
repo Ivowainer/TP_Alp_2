@@ -1,0 +1,27 @@
+def true = suc 0
+def false = 0
+
+-- ifThenElse: Si 'b' es 0 (false) devuelve 'e', si es sucesor devuelve 't'
+def if = \b:Nat. \t:Nat. \e:Nat. R e (\r:Nat. \x:Nat. t) b
+
+def isZero = \n:Nat. R true (\r:Nat. \x:Nat. false) n
+def pred = \n:Nat. R 0 (\r:Nat. \x:Nat. x) n
+def sub = \n:Nat. \m:Nat. R n (\r:Nat. \x:Nat. pred r) m
+
+-- eq: Verifica que (n - m) == 0 y (m - n) == 0
+def eq = \n:Nat. \m:Nat. if (isZero (sub n m)) (isZero (sub m n)) false 
+
+-- ifList: Lo mismo que 'if', pero tipado para retornar listas
+def ifList = \b:Nat. \t:List Nat. \e:List Nat. R e (\res:List Nat. \x:Nat. t) b
+
+-- removeAll: Elimina todas las apariciones de 'n' en una lista
+def removeAll = \n:Nat. \l:List Nat. 
+    RL nil 
+       (\x:Nat. \r:List Nat. ifList (eq n x) r (cons x r)) 
+       l
+
+-- elimDups: Agrega el elemento 'n' a la lista, pero lo purga del resto procesado 'r'
+def elimDups = \l:List Nat. 
+    RL nil 
+       (\n:Nat. \r:List Nat. cons n (removeAll n r)) 
+       l 

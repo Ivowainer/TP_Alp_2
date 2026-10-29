@@ -1,2 +1,20 @@
+-- iter f n aplica f (n+1) veces sobre 1:
+--   iter f 0     = f 1
+--   iter f (n+1) = f (iter f n)
+
+-- Es decir: iter f n = f^(n+1)(1).
+-- El 1 inicial viene de la ecuación de Ackermann:
+--   ack (m+1) 0 = ack m 1.
+
+-- En R, el step recibe primero el resultado recursivo y después
+-- el predecesor; por eso \r:Nat. \k:Nat. f r aplica f al resultado r
+-- e ignora k.
 def iter = \f:Nat->Nat. \n:Nat. R (f (suc 0)) (\r:Nat. \k:Nat. f r) n
+
+-- ack 0 n         = n + 1
+-- ack (m+1) 0     = ack m 1
+-- ack (m+1) (n+1) = ack m (ack (m+1) n)
+-- Se define con R sobre m, con T = Nat -> Nat:
+--   caso base: la función sucesor (\n. suc n)
+--   paso: recibe la función ack m y devuelve \n. iter (ack m) n
 def ack = \m:Nat. R (\n:Nat. suc n) (\f:Nat->Nat. \n:Nat. iter f) m

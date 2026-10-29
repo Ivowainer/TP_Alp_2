@@ -41,6 +41,10 @@ conversor LZero _ = Zero
 conversor (LSuc t) ent = Suc (conversor t ent)
 conversor (LRec t1 t2 t3) ent = Rec (conversor t1 ent) (conversor t2 ent) (conversor t3 ent)
 
+conversor LNil _ = Nil
+conversor (LCons t1 t2) ent = Cons (conversor t1 ent) (conversor t2 ent)
+conversor (LRL t1 t2 t3) ent = RL (conversor t1 ent) (conversor t2 ent) (conversor t3 ent)
+
 ----------------------------
 --- evaluador de términos
 ----------------------------
@@ -55,14 +59,19 @@ sub i t (u   :@: v)           = sub i t u :@: sub i t v
 sub i t (Lam t'  u)           = Lam t' (sub (i + 1) t u)
 sub i t (Let t1 t2)           = Let (sub i t t1) (sub (i + 1) t t2)
 sub _ _ Zero                  = Zero
-sub i t (Suc u)               = Suc (sub i t u)
-sub i t (Rec u v w)           = Rec (sub i t u) (sub i t v) (sub i t w)
-
+sub i t (Suc t1)              = Suc (sub i t t1)
+sub i t (Rec t1 t2 t3)        = Rec (sub i t t1) (sub i t t2) (sub i t t3)
+sub _ _ Nil                   = Nil
+sub i t (Cons t1 t2)          = Cons (sub i t t1) (sub i t t2)
+sub i t (RL t1 t2 t3)         = RL (sub i t t1) (sub i t t2) (sub i t t3)
+ 
 -- convierte un valor en el término equivalente
 quote :: Value -> Term
-quote (VLam t f) = Lam t f
-quote (VNum NZero)    = Zero
-quote (VNum (NSuc n)) = Suc (quote (VNum n))
+quote (VLam t f)        = Lam t f
+quote (VNum NZero)      = Zero
+quote (VNum (NSuc n))   = Suc (quote (VNum n))
+quote (VList VNil)      = Nil
+quote (VList (VCons t1 t2)) = Cons (quote (VNum t1)) (quote (VList t2))
 
 -- evalúa un término en un entorno dado
 eval :: NameEnv Value Type -> Term -> Value {- Type Term -}
@@ -95,6 +104,21 @@ eval nvs (Rec t1 t2 t3) =
       let nro = quote (VNum n)  
       in eval nvs (t2 :@: Rec t1 t2 nro :@: nro) -- (t2 (R t1 t2 nro)) nro (E-RSucc)
     _ -> error "No se puede aplicar R si t3 no es Nat"
+eval _ Nil = VList VNil
+eval nvs (Cons t1 t2) =
+  case eval nvs t1 of
+    VNum n -> case eval nvs t2 of
+      VList lv -> VList (VCons n lv)
+      _        -> error "El segundo argumento de cons debe ser List Nat"
+    _ -> error "El primer argumento de cons debe ser Nat"
+eval nvs (RL t1 t2 t3) =
+  case eval nvs t3 of
+    VList VNil -> eval nvs t1
+    VList (VCons n lv) ->
+      let xs = quote (VList lv)
+      in eval nvs (t2 :@: quote (VNum n) :@: RL t1 t2 xs)
+    _ -> error "No se puede aplicar RL si t3 no es List Nat"
+
 ----------------------
 --- type checkers
 -----------------------
@@ -158,4 +182,24 @@ infer' c e (Rec t1 t2 t3) = do
     then case tt3 of
            NatT -> ret tt1
            _    -> matchError NatT tt3
+    else matchError tt2_esperado tt2
+
+infer' c e Nil = ret ListT
+
+infer' c e (Cons t1 t2) = do
+  tt1 <- infer' c e t1
+  tt2 <- infer' c e t2
+  if tt1 == NatT
+    then if tt2 == ListT then ret ListT else matchError ListT tt2
+    else matchError NatT tt1
+
+infer' c e (RL t1 t2 t3) = do
+  tt1 <- infer' c e t1
+  tt2 <- infer' c e t2
+  tt3 <- infer' c e t3
+  let tt2_esperado = FunT NatT (FunT tt1 tt1)
+  if tt2 == tt2_esperado
+    then case tt3 of
+           ListT -> ret tt1
+           _     -> matchError ListT tt3
     else matchError tt2_esperado tt2
